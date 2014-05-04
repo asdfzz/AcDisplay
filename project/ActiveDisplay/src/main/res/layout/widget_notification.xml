@@ -41,6 +41,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="4dp"
+            android:layout_marginStart="10dp"
             android:scaleType="centerInside" />
 
         <TextView
@@ -51,6 +52,7 @@
             android:layout_marginBottom="-3dp"
             android:layout_toEndOf="@id/icon"
             android:minHeight="24dp"
+            android:layout_marginStart="0dp"
             style="?attr/acDisplayNotificationTitle" />
 
         <TextView
@@ -60,6 +62,7 @@
             android:layout_below="@id/title"
             android:layout_toEndOf="@id/icon"
             android:minHeight="24dp"
+            android:layout_marginStart="0dp"
             style="?attr/acDisplayNotificationSubtext" />
 
         <TextView
@@ -68,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
             android:layout_toEndOf="@id/when"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             style="?attr/acDisplayNotificationSubtext" />
 
         <TextView
@@ -77,6 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_below="@id/when"
+            android:layout_marginStart="10dp"
             style="?attr/acDisplayNotificationMessage" />
     </RelativeLayout>
 
@@ -98,7 +102,7 @@
             android:src="@drawable/ic_action_cancel"
             android:scaleType="centerInside" />
 
-    </com.achep.activedisplay.view.NotifyingLayout>
+   </com.achep.activedisplay.view.NotifyingLayout>
 
     <!--
     <ImageView
