@@ -28,7 +28,7 @@
     <style name="AcDisplay.Clock" parent="AcDisplay">
         <item name="android:textAppearance">?android:textAppearanceLarge</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">85sp</item>
+        <item name="android:textSize">50sp</item>
         <item name="android:fontFamily">sans-serif-thin</item>
         <item name="android:maxLines">1</item>
 
@@ -47,7 +47,7 @@
     <style name="AcDisplay.Status" parent="AcDisplay">
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
         <item name="android:textColor">@color/acdisplay_subtext_color</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:maxLines">2</item>
     </style>
@@ -91,7 +91,7 @@
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:maxLines">8</item>
+        <item name="android:maxLines">7</item>
     </style>
 
     <style name="AcDisplay.Notification.Subtext" parent="AcDisplay.Notification">
