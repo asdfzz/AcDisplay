@@ -84,9 +84,9 @@ public class ActiveModeService extends Service implements
      */
     public static ActiveModeSensor[] buildAvailableSensorsList(Context context) {
         SensorManager sensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
-        ActiveModeSensor[] sensors = new ActiveModeSensor[]{ // all available sensors
-                new AccelerometerSensor(),
-                new ProximitySensor()
+        ActiveModeSensor[] sensors = new ActiveModeSensor[] { // all available sensors
+                AccelerometerSensor.getInstance(),
+                ProximitySensor.getInstance()
         };
 
         // Count the number of supported sensors, and
@@ -219,15 +219,12 @@ public class ActiveModeService extends Service implements
     }
 
     @Override
-    public boolean show(ActiveModeSensor sensor) {
+    public void show(ActiveModeSensor sensor) {
         Presenter.getInstance().start(this);
-        return false;
     }
 
     @Override
-    public boolean hide(ActiveModeSensor sensor) {
-        return false; // moved to AcDisplayActivity
-    }
+    public void hide(ActiveModeSensor sensor) { /* handled by AcDisplay activity */ }
 
     @Override
     public IBinder onBind(Intent intent) {

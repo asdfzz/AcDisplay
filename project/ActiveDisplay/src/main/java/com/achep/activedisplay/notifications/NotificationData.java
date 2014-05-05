@@ -61,6 +61,7 @@ public class NotificationData {
     public CharSequence summaryText;
 
     private Bitmap icon;
+    private Bitmap circleIcon;
     private Bitmap background;
 
     /**
@@ -92,6 +93,10 @@ public class NotificationData {
      */
     public Bitmap getIcon() {
         return icon;
+    }
+
+    public Bitmap getCircleIcon() {
+        return circleIcon;
     }
 
     public Bitmap getBackground() {
@@ -137,8 +142,15 @@ public class NotificationData {
 
     private static SoftReference<Extractor> sNativeExtractor = new SoftReference<>(null);
     private static SoftReference<Extractor> sViewExtractor = new SoftReference<>(null);
-    private AcDisplayFragment.BackgroundFactoryThread mBackgroundLoader;
     private IconLoaderThread mIconLoader;
+    private AcDisplayFragment.BackgroundFactoryThread mBackgroundLoader;
+    private AcDisplayFragment.BackgroundFactoryThread.Callback mBackgroundLoaderCallback =
+            new AcDisplayFragment.BackgroundFactoryThread.Callback() {
+        @Override
+        public void onBackgroundCreated(Bitmap bitmap) {
+            setBackground(bitmap);
+        }
+    };
 
     public void markAsRead(boolean value) {
         if (isRead == (isRead = value)) return;
@@ -153,6 +165,61 @@ public class NotificationData {
     public void setBackground(Bitmap bitmap) {
         background = bitmap;
         notifyListeners(BACKGROUND);
+    }
+
+    /**
+     * Asynchronously loads the background of notification.
+     *
+     * @param sbn Notification to load from.
+     * @see #clearBackground()
+     */
+    public void loadBackground(Context context, StatusBarNotification sbn) {
+        // Stop previous thread if it is still
+        // running.
+        stopAsyncTask(mBackgroundLoader);
+
+        Bitmap bitmapIcon = sbn.getNotification().largeIcon;
+        if (bitmapIcon != null && !BitmapUtils.hasTransparentCorners(bitmapIcon)) {
+            mBackgroundLoader = new AcDisplayFragment.BackgroundFactoryThread(
+                    context, bitmapIcon, mBackgroundLoaderCallback);
+            mBackgroundLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    /**
+     * Frees the background of this notification.
+     *
+     * @see #loadBackground(Context, StatusBarNotification)
+     */
+    public void clearBackground() {
+        if (background != null) {
+            background.recycle();
+            setBackground(null);
+        }
+    }
+
+    /**
+     * Loads the circle icon of this notification.
+     *
+     * @see #clearCircleIcon()
+     */
+    public void loadCircleIcon(StatusBarNotification sbn) {
+        Bitmap bitmapIcon = sbn.getNotification().largeIcon;
+        if (bitmapIcon != null && !BitmapUtils.hasTransparentCorners(bitmapIcon)) {
+            circleIcon = BitmapUtils.createCircleBitmap(bitmapIcon);
+        }
+    }
+
+    /**
+     * Frees the circle icon of this notification.
+     *
+     * @see #loadBackground(Context, StatusBarNotification)
+     */
+    public void clearCircleIcon() {
+        if (circleIcon != null) {
+            circleIcon.recycle();
+            circleIcon = null;
+        }
     }
 
     public void loadNotification(Context context, StatusBarNotification sbn, boolean isRead) {
@@ -189,22 +256,6 @@ public class NotificationData {
         stopAsyncTask(mIconLoader);
         mIconLoader = new IconLoaderThread(context, sbn, this);
         mIconLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        stopAsyncTask(mBackgroundLoader);
-        background = sbn.getNotification().largeIcon;
-        if (background != null && !BitmapUtils.hasTransparentCorners(background)) {
-            mBackgroundLoader = new AcDisplayFragment.BackgroundFactoryThread(context, background,
-                    new AcDisplayFragment.BackgroundFactoryThread.Callback() {
-                        @Override
-                        public void onBackgroundCreated(Bitmap bitmap) {
-                            setBackground(bitmap);
-                        }
-                    }
-            );
-            mBackgroundLoader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else {
-            background = null;
-        }
     }
 
     private void stopAsyncTask(AsyncTask asyncTask) {
