@@ -55,8 +55,8 @@
 
         <ImageView
             android:id="@+id/unlock_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_gravity="center_horizontal"
             android:scaleType="centerInside"
